@@ -1,0 +1,6 @@
+include AUTHORS
+include LICENSE
+include README.rst
+recursive-include docs *
+recursive-include uploadstatic/tests *
+global-exclude *.pyc
