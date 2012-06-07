@@ -7,7 +7,7 @@ This is a Django app that provides helpers for uploading static files.
 It is based off of `github.com/jezdez/django-staticfiles`_
 but only uploads all the files in the collected `STATIC_ROOT` to S3 using
 the ``storages.backends.s3boto.S3BotoStorage`` storage backend in the
-``django-storages``.
+``django-storages`` app.
 
 Installation
 ------------
