@@ -19,6 +19,9 @@ class Command(NoArgsCommand):
         make_option('--noinput',
             action='store_false', dest='interactive', default=True,
             help="Do NOT prompt the user for input of any kind."),
+        make_option('--force',
+            action='store_true', dest='force', default=False,
+            help="Do NOT skip any files when uploading."),
         make_option('-i', '--ignore', action='append', default=[],
             dest='ignore_patterns', metavar='PATTERN',
             help="Ignore files or directories matching this glob-style "
@@ -50,6 +53,7 @@ class Command(NoArgsCommand):
         self.interactive = options['interactive']
         self.verbosity = int(options.get('verbosity', 1))
         self.dry_run = options['dry_run']
+        self.force = options['force']
         ignore_patterns = options['ignore_patterns']
         ignore_patterns.extend(getattr(settings, 'UPLOADSTATIC_IGNORE_PATTERNS', []))
         if options['use_default_ignore_patterns']:
@@ -60,12 +64,12 @@ class Command(NoArgsCommand):
         if self.dry_run:
             self.log(u"Pretending to upload '%s'" % path, level=1)
         else:
-            if self.remote_storage.exists(path):
-                local_modified = self.local_storage.modified_time(path)
+            if not self.force and self.remote_storage.exists(path):
+                #local_modified = self.local_storage.modified_time(path)
+                #remote_modified = self.remote_storage.modified_time(path)
                 local_size = self.local_storage.size(path)
-                remote_modified = self.remote_storage.modified_time(path)
                 remote_size = self.remote_storage.size(path)
-                if remote_modified >= local_modified and remote_size == local_size:
+                if remote_size == local_size:
                     self.log(u"Skipping '%s'" % path, level=2)
                     self.skipped_files.append(path)
                     return
