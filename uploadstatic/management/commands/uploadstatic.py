@@ -61,11 +61,11 @@ class Command(NoArgsCommand):
             self.log(u"Pretending to upload '%s'" % path, level=1)
         else:
             if self.remote_storage.exists(path):
-                local_modified = self.local_storage.modified_time(path)
+                local_created = self.local_storage.created_time(path)
                 local_size = self.local_storage.size(path)
-                remote_modified = self.remote_storage.modified_time(path)
+                remote_created = self.remote_storage.created_time(path)
                 remote_size = self.remote_storage.size(path)
-                if remote_modified >= local_modified and remote_size == local_size:
+                if remote_created >= local_created and remote_size == local_size:
                     self.log(u"Skipping '%s'" % path, level=2)
                     self.skipped_files.append(path)
                     return
